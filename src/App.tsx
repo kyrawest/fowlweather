@@ -28,7 +28,11 @@ function App() {
 
   return (
     <>
-      <Header setLocation={setLocation}></Header>
+      <Header
+        setLocation={setLocation}
+        setTempUnit={setTempUnit}
+        tempUnit={tempUnit}
+      ></Header>
       <main className="flex flex-col items-center w-full gap-1 md:gap-4">
         <CurrentWeather
           tempUnit={tempUnit}
