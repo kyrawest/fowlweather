@@ -1,9 +1,0 @@
-{
-  "exclude": [
-    "node_modules",
-    "src/stories",
-    "**/*.stories.tsx",
-    "**/*.stories.ts",
-    "storybook-static"
-  ]
-}
