@@ -1,6 +1,6 @@
 import { Handler } from "@netlify/functions";
-import OpenAI from "openai";
-import dotenv from "dotenv";
+import { OpenAI } from "openai";
+import * as dotenv from "dotenv";
 
 dotenv.config(); // load from .env file
 
