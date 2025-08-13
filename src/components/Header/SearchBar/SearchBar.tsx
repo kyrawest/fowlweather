@@ -1,19 +1,24 @@
 import { useState, useEffect } from "react";
 
 //Components
-import { Input } from "@headlessui/react";
+import {
+  Combobox,
+  ComboboxInput,
+  ComboboxOption,
+  ComboboxOptions,
+} from "@headlessui/react";
 
 //Types
 import type { Location } from "types/Location.ts";
 
 interface SearchBarProps {
+  selection: Location;
   selectionHandler: (selection: Location) => void; //When used only to pick a new location, selectionhandler is expected to be the state setter for the weather location.
 }
 
-export const SearchBar = ({ selectionHandler }: SearchBarProps) => {
+export const SearchBar = ({ selectionHandler, selection }: SearchBarProps) => {
   const [text, setText] = useState<string>("");
   const [locations, setLocations] = useState<Location[]>([]);
-  const [locationNames, setLocationNames] = useState<string[]>([]);
 
   useEffect(() => {
     const getLocations = async (search: string) => {
@@ -26,10 +31,6 @@ export const SearchBar = ({ selectionHandler }: SearchBarProps) => {
 
         const { results } = await res.json();
         setLocations(results);
-        const newLocationNames = results.map(
-          (result: Location) => `${result.name}, ${result.country}`
-        );
-        setLocationNames(newLocationNames);
       } catch (err: any) {
         console.log(err.message);
       }
@@ -37,12 +38,52 @@ export const SearchBar = ({ selectionHandler }: SearchBarProps) => {
 
     if (text.length > 2) {
       getLocations(text);
+    } else {
+      setLocations([]);
     }
   }, [text]);
 
   return (
     <>
-      <div className="relative transition-width duration-300 ease-in w-50 md:w-150">
+      <Combobox
+        onChange={(location: Location) => {
+          if (location !== null) {
+            selectionHandler(location);
+          }
+        }}
+        onClose={() => setText("")}
+      >
+        <span className="relative z-10">
+          <ComboboxInput
+            aria-label="Location"
+            displayValue={(loc: Location | null | undefined) => loc?.name ?? ""}
+            onChange={(event) => setText(event.target.value)}
+            className="w-50 md:w-150 transition-width duration-300 ease-in bg-gray-300/50 rounded-full indent-3 h-10 relative z-200"
+            type="text"
+            autoComplete="off"
+            name="location-search"
+            placeholder="Search new location"
+          />
+          <ComboboxOptions
+            // anchor={{ to: "bottom", gap: "-40px" }}
+            className="absolute left-0 top-full -mt-10 bg-gray-50/99 h-fit  pt-10 z-198 w-50 md:w-150 indent-3 rounded-3xl empty:invisible"
+          >
+            {locations?.map((location: Location) => (
+              <ComboboxOption
+                key={location.id}
+                value={location}
+                className="data-focus:text-shadow-stone-600/20 text-shadow-sm"
+              >
+                <span>
+                  {location.name}, {location.country}
+                </span>
+              </ComboboxOption>
+            ))}
+          </ComboboxOptions>
+        </span>
+      </Combobox>
+
+      {/* <div className="relative transition-width duration-300 ease-in w-50 md:w-150">
         <Input
           name="Location search"
           as="input" //Cretaes a controlled input when working with headless UI
@@ -68,7 +109,7 @@ export const SearchBar = ({ selectionHandler }: SearchBarProps) => {
             </li>
           ))}
         </ul>
-      </div>
+      </div> */}
     </>
   );
 };

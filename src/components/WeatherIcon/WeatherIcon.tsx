@@ -1,17 +1,17 @@
 // src/components/WeatherIcon/WeatherIcon.tsx
 
-import DayClear from "@bybas/weather-icons/design/fill/animation-ready/clear-day.svg?react";
-import Cloudy from "@bybas/weather-icons/design/fill/animation-ready/cloudy.svg?react";
-import Fog from "@bybas/weather-icons/design/fill/animation-ready/fog.svg?react";
-import Drizzle from "@bybas/weather-icons/design/fill/animation-ready/drizzle.svg?react";
-import Rain from "@bybas/weather-icons/design/fill/animation-ready/rain.svg?react";
-import FreezingRain from "@bybas/weather-icons/design/fill/animation-ready/hail.svg?react";
-import Snow from "@bybas/weather-icons/design/fill/animation-ready/snow.svg?react";
-import Snowflakes from "@bybas/weather-icons/design/fill/animation-ready/snowflake.svg?react";
-import Showers from "@bybas/weather-icons/design/fill/animation-ready/drizzle.svg?react";
-import Thunderstorms from "@bybas/weather-icons/design/fill/animation-ready/thunderstorms.svg?react";
-import Hail from "@bybas/weather-icons/design/fill/animation-ready/hail.svg?react";
-import Unknown from "@bybas/weather-icons/design/fill/animation-ready/not-available.svg?react";
+import DayClear from "@bybas/weather-icons/production/line/all/clear-day.svg?react";
+import Cloudy from "@bybas/weather-icons/production/line/all/cloudy.svg?react";
+import Fog from "@bybas/weather-icons/production/line/all/fog.svg?react";
+import Drizzle from "@bybas/weather-icons/production/line/all/drizzle.svg?react";
+import Rain from "@bybas/weather-icons/production/line/all/rain.svg?react";
+import FreezingRain from "@bybas/weather-icons/production/line/all/hail.svg?react";
+import Snow from "@bybas/weather-icons/production/line/all/snow.svg?react";
+import Snowflakes from "@bybas/weather-icons/production/line/all/snowflake.svg?react";
+import Showers from "@bybas/weather-icons/production/line/all/drizzle.svg?react";
+import Thunderstorms from "@bybas/weather-icons/production/line/all/thunderstorms.svg?react";
+import Hail from "@bybas/weather-icons/production/line/all/hail.svg?react";
+import Unknown from "@bybas/weather-icons/production/line/all/not-available.svg?react";
 
 import type { FC, SVGProps } from "react";
 

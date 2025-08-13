@@ -21,6 +21,7 @@ function App() {
     id: 6173331,
     timezone: "America/Vancouver",
   });
+  const [tempPref, setTempPref] = useState<string>("Neither hot nor cold");
   const { weatherData, loading, error } = useWeatherData(tempUnit, location);
 
   if (loading) return <p>Loading weather...</p>;
@@ -31,7 +32,10 @@ function App() {
       <Header
         setLocation={setLocation}
         setTempUnit={setTempUnit}
+        setTempPref={setTempPref}
         tempUnit={tempUnit}
+        tempPref={tempPref}
+        location={location}
       ></Header>
       <main className="flex flex-col items-center w-full gap-1 md:gap-4">
         <CurrentWeather
@@ -40,6 +44,7 @@ function App() {
           apparent_temperature={weatherData.current.apparent_temperature}
           weather_code={weatherData.current.weather_code}
           locationName={location.name}
+          tempPref={tempPref}
         />
         <Forecast tempUnit={tempUnit} weatherData={weatherData} />
       </main>

@@ -218,8 +218,8 @@ export function useWeatherData(unit: TempUnit, location: Location) {
 
       loadWeather();
     },
-    //Dependancies: location - fetch weathdata again if location is changed.
-    [location]
+    //Dependancies: location - fetch weathdata again if location or the temperature unit is changed.
+    [location, unit]
   );
 
   return { weatherData, loading, error };

@@ -50,7 +50,10 @@ const WeatherModule = ({
           {formatted}
         </p>
         <div className="col-span-1 row-span-1 col-start-2 md:col-start-1 md:row-start-2 md:col-span-2 place-self-center">
-          <WeatherIcon weather_code={weather_code} className="w-20" />
+          <WeatherIcon
+            weather_code={weather_code}
+            className="w-17 rounded-full shadow-2xl bg-lime-900/30"
+          />
         </div>
         <Temperature
           tempUnit={tempUnit}
@@ -73,7 +76,7 @@ const WeatherModule = ({
             ></Temperature>
           </>
         ) : undefined}
-        <div className="col-span-1 col-start-2 row-start-2 md:row-start-5 md:col-start-1 md:col-span-2 justify-self-center self-top">
+        <div className="col-span-1 col-start-2 row-start-2 md:row-start-5 md:col-start-1 md:col-span-2 text-sm justify-self-center self-top">
           {weatherCodeToString(weather_code)}
         </div>
       </div>

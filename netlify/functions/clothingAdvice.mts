@@ -2,6 +2,8 @@ import { Handler } from "@netlify/functions";
 import { OpenAI } from "openai";
 import * as dotenv from "dotenv";
 
+import { TempUnit } from "../../src/types/TempUnit.ts";
+
 dotenv.config(); // load from .env file
 
 const openai = new OpenAI({
@@ -14,18 +16,42 @@ export const handler: Handler = async (event) => {
   }
 
   try {
-    const { weatherData, preference } = JSON.parse(event.body || "{}");
+    const { weatherData, preference, tempUnit } = JSON.parse(
+      event.body || "{}"
+    );
 
     const { temperatureMin, temperatureMax, weatherCodeString } = weatherData;
 
+    let unitString = "°C";
+    let tempDif = "2°C";
+    let lowExtreme = "0°C";
+    let highExtreme = "30°C";
+    if (tempUnit == TempUnit.fahrenheit) {
+      unitString = "°F";
+      tempDif = "3.5°F";
+      lowExtreme = "32°C";
+      highExtreme = "86°F";
+    }
+
+    let preferencePrompt = "";
+    if (preference == "Hot") {
+      preferencePrompt = `The user tends to feel slightly warmer than other people by about ${tempDif}, but make sure the clothing advice matches the actual weather summary. Don't give innapropriate suggestions for the temperature like a tank top in very cold weather, or use innapropriate colloquialisms for warm weather like "stay cozy".`;
+    } else if (preference == "Cold") {
+      preferencePrompt = `The user tends to feel slightly colder than other people by about ${tempDif}, but make sure the clothing advice matches the actual weather summary. Don't give innapropriate suggestions for the temperature like a scarf in warm weather, or use innapropriate colloquialisms for cold weather like "stay cool".`;
+    }
+
     const summary = `
                       Today's weather:
-                      - Max temp: ${temperatureMin}°C
-                      - Min temp: ${temperatureMax}°C
+                      - Max temp: ${temperatureMin}${unitString}
+                      - Min temp: ${temperatureMax}${unitString}
                       - Conditions: ${weatherCodeString}
                       `;
 
-    const prompt = `The user has this weather summary:\n${summary}\n. The user runs ${preference}. Give advice for what they should wear today in 1 or 2 sentences without repeating information from the summary, speaking like a goose.`;
+    const prompt = `
+    Weather summary:\n${summary}\n. 
+    Give advice specifically for what they should wear today in 1 or 2 sentences without repeating information from the summary, speaking like a goose. Do not use emojis.
+    ${preferencePrompt}
+    `;
 
     const completion = await openai.chat.completions.create({
       model: "gpt-3.5-turbo",
