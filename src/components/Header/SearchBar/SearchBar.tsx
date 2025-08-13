@@ -12,11 +12,10 @@ import {
 import type { Location } from "types/Location.ts";
 
 interface SearchBarProps {
-  selection: Location;
   selectionHandler: (selection: Location) => void; //When used only to pick a new location, selectionhandler is expected to be the state setter for the weather location.
 }
 
-export const SearchBar = ({ selectionHandler, selection }: SearchBarProps) => {
+export const SearchBar = ({ selectionHandler }: SearchBarProps) => {
   const [text, setText] = useState<string>("");
   const [locations, setLocations] = useState<Location[]>([]);
 

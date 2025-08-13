@@ -27,7 +27,6 @@ interface HeaderProps {
   setTempPref: (preference: string) => void;
   tempUnit: TempUnit;
   tempPref: string;
-  location: Location;
 }
 
 const options = ["Hot", "Neither hot nor cold", "Cold"];
@@ -38,7 +37,6 @@ export const Header = ({
   tempUnit,
   setTempPref,
   tempPref,
-  location,
 }: HeaderProps) => {
   //Tells us if the settings dialog is open
   let [isOpen, setIsOpen] = useState<boolean>(false);
@@ -55,7 +53,7 @@ export const Header = ({
     <header className="z-100 sticky top-0 ">
       <nav className="flex flex-row justify-between rounded-lg border shadow-lg p-2 bg-white border-slate-200 shadow-slate-950/5 mx-auto w-full">
         <img src="/fw-logo-sm.svg" className="h-10" />
-        <SearchBar selectionHandler={setLocation} selection={location} />
+        <SearchBar selectionHandler={setLocation} />
         <button onClick={() => setIsOpen(true)} aria-label="Open settings">
           <Cog6ToothIcon className="h-6 w-6"></Cog6ToothIcon>
         </button>

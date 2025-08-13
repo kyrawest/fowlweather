@@ -35,7 +35,6 @@ function App() {
         setTempPref={setTempPref}
         tempUnit={tempUnit}
         tempPref={tempPref}
-        location={location}
       ></Header>
       <main className="flex flex-col items-center w-full gap-1 md:gap-4">
         <CurrentWeather
