@@ -29,7 +29,7 @@ export const Footer = ({}: FooterProps) => {
       </div>
       <div
         id="attribution"
-        className="flex flex-col gap-1 items-center sm:items-end"
+        className="flex flex-col gap-2 items-center sm:items-end"
       >
         <span className="inline-flex flex-row gap-1 text-sm">
           <LinkIcon className="h-5 w-5"></LinkIcon>

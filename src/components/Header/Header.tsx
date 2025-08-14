@@ -52,7 +52,11 @@ export const Header = ({
   return (
     <header className="z-100 sticky top-0 ">
       <nav className="flex flex-row justify-between rounded-lg border shadow-lg p-2 bg-white border-slate-200 shadow-slate-950/5 mx-auto w-full">
-        <img src="/fw-logo-sm.svg" className="h-10" />
+        <img
+          src="/fw-logo-sm.svg"
+          className="h-10"
+          alt="Goose icon with yellow background"
+        />
         <SearchBar selectionHandler={setLocation} />
         <button onClick={() => setIsOpen(true)} aria-label="Open settings">
           <Cog6ToothIcon className="h-6 w-6"></Cog6ToothIcon>
