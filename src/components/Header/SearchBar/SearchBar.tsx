@@ -1,5 +1,8 @@
 import { useState, useEffect } from "react";
 
+//Context
+import { useError } from "context/ErrorContext";
+
 //Components
 import {
   Combobox,
@@ -19,6 +22,9 @@ export const SearchBar = ({ selectionHandler }: SearchBarProps) => {
   const [text, setText] = useState<string>("");
   const [locations, setLocations] = useState<Location[]>([]);
 
+  //Function for globally setting errors
+  const { setError } = useError();
+
   useEffect(() => {
     const getLocations = async (search: string) => {
       try {
@@ -32,6 +38,7 @@ export const SearchBar = ({ selectionHandler }: SearchBarProps) => {
         setLocations(results);
       } catch (err: any) {
         console.log(err.message);
+        setError("We couldn't fetch location data, try again later.");
       }
     };
 
@@ -81,34 +88,6 @@ export const SearchBar = ({ selectionHandler }: SearchBarProps) => {
           </ComboboxOptions>
         </span>
       </Combobox>
-
-      {/* <div className="relative transition-width duration-300 ease-in w-50 md:w-150">
-        <Input
-          name="Location search"
-          as="input" //Cretaes a controlled input when working with headless UI
-          type="text"
-          value={text}
-          aria-description="Input location"
-          className="w-50 md:w-150 transition-width duration-300 ease-in bg-gray-300/50 rounded-full indent-3 h-10 relative z-11"
-          placeholder="Enter a location"
-          onChange={(e) => setText(e.target.value)}
-        />
-        <ul className="absolute inset-y-0 z-10 bg-gray-50/99 h-fit transition-width duration-300 ease-in w-50 md:w-150 pt-10 indent-3 rounded-3xl">
-          {locationNames.map((name, index) => (
-            <li
-              key={index}
-              onClick={() => {
-                // When a location is clicked, change the location state, then clear the input and results.
-                selectionHandler(locations[index]);
-                setLocationNames([]);
-                setText("");
-              }}
-            >
-              {name}
-            </li>
-          ))}
-        </ul>
-      </div> */}
     </>
   );
 };

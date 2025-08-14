@@ -1,6 +1,9 @@
 import { useEffect, useState } from "react";
 import { fetchWeatherApi } from "openmeteo";
 
+//Context
+import { useError } from "context/ErrorContext";
+
 //Types
 import { TempUnit } from "types/TempUnit";
 import type { Location } from "types/Location.ts";
@@ -10,7 +13,9 @@ const url = "https://api.open-meteo.com/v1/forecast";
 export function useWeatherData(unit: TempUnit, location: Location) {
   const [weatherData, setWeatherData] = useState<any>(null);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
+
+  //Function for globally setting errors
+  const { setError } = useError();
 
   // Create a new Date object for the current time for hourly forecast. Can also be used for daily
   const currentDate = new Date();
@@ -102,7 +107,17 @@ export function useWeatherData(unit: TempUnit, location: Location) {
       async function loadWeather() {
         try {
           const responses = await fetchWeatherApi(url, params);
+
+          //Check that we have received a valid response from the API
+          if (!responses || responses.length === 0) {
+            throw new Error("No weather data returned.");
+          }
+
           const response = responses[0];
+
+          if (!response) {
+            throw new Error("Weather API response is invalid.");
+          }
 
           const latitude = response.latitude();
           const longitude = response.longitude();
@@ -114,6 +129,12 @@ export function useWeatherData(unit: TempUnit, location: Location) {
           const current = response.current()!;
           const hourly = response.hourly()!;
           const daily = response.daily()!;
+
+          if (!current || !hourly || !daily) {
+            throw new Error(
+              "Something went wrong fetching your weather data. Try again later."
+            );
+          }
 
           const weather = {
             location: {
@@ -210,7 +231,8 @@ export function useWeatherData(unit: TempUnit, location: Location) {
           setWeatherData(weather);
         } catch (err: any) {
           console.error("Weather fetch failed:", err);
-          setError(err.message || "Unknown error");
+          //Passes this to the global error handling context
+          setError(err.message || "Unknown error fetching weather data");
         } finally {
           setLoading(false);
         }
@@ -218,9 +240,9 @@ export function useWeatherData(unit: TempUnit, location: Location) {
 
       loadWeather();
     },
-    //Dependancies: location - fetch weathdata again if location or the temperature unit is changed.
+    //Dependancies: location - fetch weatherdata again if location or the temperature unit is changed.
     [location, unit]
   );
 
-  return { weatherData, loading, error };
+  return { weatherData, loading };
 }

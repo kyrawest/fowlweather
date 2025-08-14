@@ -11,7 +11,8 @@
       "components/*": ["components/*"],
       "hooks/*": ["hooks/*"],
       "utils/*": ["utils/*"],
-      "types/*": ["types/*"]
+      "types/*": ["types/*"],
+      "context/*": ["context/*"]
     },
 
     /* Bundler mode */

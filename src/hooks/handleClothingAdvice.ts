@@ -21,18 +21,15 @@ export const handleClothingAdvice = async (
     weatherCodeString,
   };
 
-  try {
-    const res = await fetch("/.netlify/functions/clothingAdvice", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ weatherData, preference, tempUnit }),
-    });
+  //No try/catch here because this is already wrapped in another try catch in CurrentWeather.ts
+  const res = await fetch("/.netlify/functions/clothingAdvice", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ weatherData, preference, tempUnit }),
+  });
 
-    if (!res.ok) throw new Error("Failed to get advice");
+  if (!res.ok) throw new Error("Failed to get advice");
 
-    const { advice } = await res.json();
-    stateSetter(advice);
-  } catch (err: any) {
-    console.log(err.message);
-  }
+  const { advice } = await res.json();
+  stateSetter(advice);
 };
