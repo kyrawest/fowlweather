@@ -18,6 +18,7 @@ import type { Location } from "types/Location.ts";
 //Context
 import { ErrorProvider } from "context/ErrorContext";
 
+//This is the app wrapped in the global error handler content, which is what is exported below
 function App() {
   return (
     <ErrorProvider>
@@ -40,7 +41,8 @@ function MainApp() {
 
   const { weatherData, loading } = useWeatherData(tempUnit, location);
 
-  let Current = <CurrentWeatherPlaceholder loading={loading} />;
+  //Generate our main weather rendering components. Because these rely on weatheData, by default they generate a placeholder until the data is confirmed to exist.
+  let Current = <CurrentWeatherPlaceholder loading={loading} />; //This placeholder will give a loading or error message based ont he loading status.
   if (weatherData !== null && weatherData.current !== null) {
     Current = (
       <CurrentWeather
@@ -78,8 +80,8 @@ function MainApp() {
       <main className="flex flex-col items-center w-full gap-1 md:gap-4">
         {Current}
         {ForecastComponent}
-        <Footer />
       </main>
+      <Footer />
     </>
   );
 }
