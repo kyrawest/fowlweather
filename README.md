@@ -71,11 +71,12 @@ npm run build
 It turns out that it’s easier said than done to get an AI goose to give accurate, useful clothing advice on the first try. Please note that when talking about OpenAI in this section, I may simply refer to it as “the goose”. You can find my OpenAI call in `netlify/functions/clothingAdvice.mts`. My final prompt (with some example data here to make this easier to read for humans) was:
 
 ```
- `
-	Weather summary:
+ `   Weather summary:
      Today's weather:
      - Max temp: 27°C
      - Min temp: 24°C
+     - Current temp: 25°C
+     - Currently feels like: 28°C
      - Conditions: Sunny
                      
     Give advice specifically for what they should wear today in 1 or 2 sentences without repeating information from the summary,
@@ -116,3 +117,11 @@ npm run storybook
 | `npm run storybook`    | Run Storybook for UI component previews |
 | `npm run build-storybook` | Build static Storybook site |
 | `npm run deploy`       | Deploy to Netlify production |
+
+***
+## Screenshots
+
+
+<img width="293" height="632" alt="Fowl Weather mian app screenshot showing the header including search bar and setting button, current weather forecast with a goose dressed accordingly, the goose's weather advice and part of a 7-day forecast" src="https://github.com/user-attachments/assets/5c7453c6-44e6-43b1-a7d5-dd379fdfd02c" />
+<img width="292" height="621" alt="Screenshot of Fowl Weather settings dialog with a toggle for temperature unit and personalization for the goose's clothing advice." src="https://github.com/user-attachments/assets/e1792aea-b780-408f-9831-0f8a6024b959" />
+
