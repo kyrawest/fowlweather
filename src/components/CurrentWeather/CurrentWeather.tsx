@@ -89,7 +89,7 @@ const CurrentWeatherModule = ({
                   temperature={temperature_2m}
                   className="transition-text duration-300 ease-in text-3xl md:text-5xl font-semibold col-span-1 col-start-2 row-start-1 justify-self-center self-center mt-6"
                 ></Temperature>
-                <div className="col-span-2 col-start-1 row-start-3 justify-self-center self-top text-md md:text-2xl relative md:-inset-y-15 mt-3">
+                <div className="col-span-2 col-start-1 row-start-3 justify-self-center self-top text-md md:text-2xl relative md:-inset-y-15 mt-3 text-center">
                   {weatherCodeString}
                 </div>
                 <Temperature
