@@ -4,7 +4,7 @@ import * as dotenv from "dotenv";
 
 import { TempUnit } from "../../src/types/TempUnit.ts";
 
-dotenv.config(); // load from .env file
+dotenv.config();
 
 const openai = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY, // secret key stored securely in Netlify or .env in dev
@@ -20,17 +20,24 @@ export const handler: Handler = async (event) => {
       event.body || "{}"
     );
 
-    const { temperatureMin, temperatureMax, weatherCodeString } = weatherData;
+    const {
+      temperatureMin,
+      temperatureMax,
+      temperatureCurrent,
+      apparentTemperature,
+      weatherCodeString,
+    } = weatherData;
 
     let unitString = "°C";
     let tempDif = "2°C";
-    let lowExtreme = "0°C";
-    let highExtreme = "30°C";
+    //extremes not necessary but left in for future prompt iterations
+    // let lowExtreme = "0°C";
+    // let highExtreme = "30°C";
     if (tempUnit == TempUnit.fahrenheit) {
       unitString = "°F";
       tempDif = "3.5°F";
-      lowExtreme = "32°C";
-      highExtreme = "86°F";
+      // lowExtreme = "32°C";
+      // highExtreme = "86°F";
     }
 
     let preferencePrompt = "";
@@ -44,6 +51,8 @@ export const handler: Handler = async (event) => {
                       Today's weather:
                       - Max temp: ${temperatureMin}${unitString}
                       - Min temp: ${temperatureMax}${unitString}
+                      - Current temp: ${temperatureCurrent}${unitString}
+                      - Currently feels like: ${apparentTemperature}${unitString}
                       - Conditions: ${weatherCodeString}
                       `;
 

@@ -13,6 +13,29 @@ interface ForecastProps {
 export const Forecast = ({ tempUnit, weatherData }: ForecastProps) => {
   const tabNames: string[] = ["Hourly", "7 days"];
 
+  const isDay = (sunrise: Date, time: Date, sunset: Date) => {
+    let day = 1;
+    if (sunrise < time && time < sunset) {
+      day = 1;
+    } else day = 0;
+    return day;
+  };
+
+  const isDayHourly = (time: Date) => {
+    //checks if the hourly time is between the first daily forecast day sunrise/sunset OR the next day
+    //sometimes if fetching data for a very different zimezone from your computer means your first daily weather forcast is a day behind the searched location's
+    let day = 1;
+    if (
+      isDay(weatherData.daily.sunrise[0], time, weatherData.daily.sunset[0]) ||
+      isDay(weatherData.daily.sunrise[1], time, weatherData.daily.sunset[1])
+    ) {
+      day = 1;
+    } else {
+      day = 0;
+    }
+    return day;
+  };
+
   return (
     <TabGroup
       id="forecast"
@@ -38,6 +61,8 @@ export const Forecast = ({ tempUnit, weatherData }: ForecastProps) => {
               weather_code={weatherData.hourly.weather_code[i]}
               time={weatherData.hourly.time[i]}
               type="hourly"
+              isDay={isDayHourly(weatherData.hourly.time[i])}
+              timeZone={weatherData.location.timezone}
             />
           ))}
         </TabPanel>
@@ -45,14 +70,20 @@ export const Forecast = ({ tempUnit, weatherData }: ForecastProps) => {
           {Array.from({ length: 7 }, (_, i) => (
             //Skip 2 indexes because openMeto API returns the previous+current day in daily data
             <WeatherModule
-              key={i + 2}
+              key={i}
               tempUnit={tempUnit}
-              temperature_2m_max={weatherData.daily.temperature_2m_max[i + 2]}
-              temperature_2m_mean={weatherData.daily.temperature_2m_mean[i + 2]}
-              temperature_2m_min={weatherData.daily.temperature_2m_min[i + 2]}
-              weather_code={weatherData.daily.weather_code[i + 2]}
-              time={weatherData.daily.time[i + 2]}
+              temperature_2m_max={weatherData.daily.temperature_2m_max[i]}
+              temperature_2m_mean={weatherData.daily.temperature_2m_mean[i]}
+              temperature_2m_min={weatherData.daily.temperature_2m_min[i]}
+              weather_code={weatherData.daily.weather_code[i]}
+              time={weatherData.daily.time[i]}
               type="daily"
+              isDay={isDay(
+                weatherData.daily.sunrise[i],
+                weatherData.hourly.time[weatherData.daily.time[i]],
+                weatherData.daily.sunset[i]
+              )}
+              timeZone={weatherData.location.timezone}
             />
           ))}
         </TabPanel>

@@ -2,6 +2,8 @@
 interface WeatherData {
   temperatureMin: number;
   temperatureMax: number;
+  temperatureCurrent: number;
+  apparentTemperature: number;
   weatherCodeString: string;
 }
 
@@ -10,6 +12,8 @@ import { TempUnit } from "types/TempUnit";
 export const handleClothingAdvice = async (
   temperatureMin: number,
   temperatureMax: number,
+  temperatureCurrent: number,
+  apparentTemperature: number,
   weatherCodeString: string,
   preference: string,
   tempUnit: TempUnit,
@@ -18,10 +22,12 @@ export const handleClothingAdvice = async (
   const weatherData: WeatherData = {
     temperatureMin,
     temperatureMax,
+    temperatureCurrent,
+    apparentTemperature,
     weatherCodeString,
   };
 
-  //No try/catch here because this is already wrapped in another try catch in CurrentWeather.ts
+  //No try/catch here because this is already wrapped in another try catch in CurrentWeather.tsx
   const res = await fetch("/.netlify/functions/clothingAdvice", {
     method: "POST",
     headers: { "Content-Type": "application/json" },

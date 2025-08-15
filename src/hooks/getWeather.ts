@@ -43,6 +43,7 @@ export function useWeatherData(unit: TempUnit, location: Location) {
   const formattedEndTime = isoEndTime.substring(0, 16);
 
   const params = {
+    //These params are more than we really need, left in for possible future buildout. For now, location fetch still takes <1s so okay to leave in.
     latitude: location.latitude,
     longitude: location.longitude,
     daily: [
@@ -61,6 +62,8 @@ export function useWeatherData(unit: TempUnit, location: Location) {
       "precipitation_sum",
       "precipitation_hours",
       "precipitation_probability_max",
+      "sunrise",
+      "sunset",
     ],
     hourly: [
       "temperature_2m",
@@ -94,7 +97,7 @@ export function useWeatherData(unit: TempUnit, location: Location) {
       "weather_code",
       "cloud_cover",
     ],
-    timezone: "auto",
+    timezone: location.timezone,
     temperature_unit: unit,
     start_date: formattedCurrentDate.substring(0, 10),
     end_date: formattedEndDate,
@@ -136,6 +139,10 @@ export function useWeatherData(unit: TempUnit, location: Location) {
             );
           }
 
+          // Define Int64 variables so they can be processed accordingly
+          const sunrise = daily.variables(15)!;
+          const sunset = daily.variables(16)!;
+
           const weather = {
             location: {
               latitude,
@@ -146,9 +153,7 @@ export function useWeatherData(unit: TempUnit, location: Location) {
               utcOffsetSeconds,
             },
             current: {
-              time: new Date(
-                (Number(current.time()) + utcOffsetSeconds) * 1000
-              ),
+              time: new Date(Number(current.time()) * 1000),
               temperature_2m: current.variables(0)!.value(),
               relative_humidity_2m: current.variables(1)!.value(),
               apparent_temperature: current.variables(2)!.value(),
@@ -202,12 +207,7 @@ export function useWeatherData(unit: TempUnit, location: Location) {
                 ),
               ].map(
                 (_, i) =>
-                  new Date(
-                    (Number(daily.time()) +
-                      i * daily.interval() +
-                      utcOffsetSeconds) *
-                      1000
-                  )
+                  new Date((Number(daily.time()) + i * daily.interval()) * 1000)
               ),
               temperature_2m_mean: daily.variables(0)!.valuesArray(),
               apparent_temperature_mean: daily.variables(1)!.valuesArray(),
@@ -224,10 +224,17 @@ export function useWeatherData(unit: TempUnit, location: Location) {
               precipitation_sum: daily.variables(12)!.valuesArray(),
               precipitation_hours: daily.variables(13)!.valuesArray(),
               precipitation_probability_max: daily.variables(14)!.valuesArray(),
+              // Map Int64 values to according structure
+              sunrise: [...Array(sunrise.valuesInt64Length())].map(
+                (_, i) => new Date(Number(sunrise.valuesInt64(i)) * 1000)
+              ),
+              // Map Int64 values to according structure
+              sunset: [...Array(sunset.valuesInt64Length())].map(
+                (_, i) => new Date(Number(sunset.valuesInt64(i)) * 1000)
+              ),
             },
           };
 
-          console.log(weather);
           setWeatherData(weather);
         } catch (err: any) {
           console.error("Weather fetch failed:", err);

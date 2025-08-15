@@ -1,9 +1,7 @@
 //Components
 import { LinkIcon } from "@heroicons/react/20/solid";
 
-interface FooterProps {}
-
-export const Footer = ({}: FooterProps) => {
+export const Footer = () => {
   return (
     <footer className="relative bottom-0 bg-stone-50 h-auto w-full flex flex-col sm:flex-row gap-4 text-xs py-2 px-5 md:px-10 justify-between mt-5">
       <div id="dev-info" className=" flex self-center">

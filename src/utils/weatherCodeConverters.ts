@@ -59,12 +59,23 @@ export const weatherCodeToGoose = (code: number): string | undefined => {
   }
 };
 
-export const weatherCodeToString = (code: number): string => {
+export const weatherCodeToString = (code: number, isDay: number): string => {
   switch (code) {
-    case 0:
-      return "Sunny";
-    case 1:
-      return "Mostly sunny, some cloud";
+    case 0: {
+      if (isDay) {
+        return "Sunny";
+      } else {
+        return "Clear night skies";
+      }
+    }
+    case 1: {
+      if (isDay) {
+        return "Mostly sunny, some cloud";
+      } else {
+        return "Mostly clear night skies, some cloud";
+      }
+    }
+
     case 2:
       return "Partly cloudy";
     case 3:

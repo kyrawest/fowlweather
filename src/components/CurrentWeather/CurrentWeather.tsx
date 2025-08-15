@@ -10,7 +10,7 @@ import {
 import { useError } from "context/ErrorContext";
 
 //hooks
-import { handleClothingAdvice } from "hooks/handleClothingAdvice.ts";
+import { handleClothingAdvice } from "utils/handleClothingAdvice.ts";
 
 //Components
 import Temperature from "../Temperature/Temperature.tsx";
@@ -26,6 +26,11 @@ export type CurrentWeatherModuleProps = {
   weather_code: number;
   locationName: string;
   tempPref: string;
+  temperature_min: number;
+  temperature_max: number;
+  sunrise: Date;
+  sunset: Date;
+  time: Date;
 };
 
 const CurrentWeatherModule = ({
@@ -35,6 +40,11 @@ const CurrentWeatherModule = ({
   weather_code,
   locationName,
   tempPref,
+  temperature_min,
+  temperature_max,
+  sunrise,
+  sunset,
+  time,
 }: CurrentWeatherModuleProps) => {
   const { setError } = useError();
   const [advice, setAdvice] = useState<string>(
@@ -48,7 +58,12 @@ const CurrentWeatherModule = ({
     setDisableAdvice(false);
   }, [locationName]);
 
-  const weatherCodeString = weatherCodeToString(weather_code);
+  let isDay = 0;
+  if (sunrise < time && time < sunset) {
+    isDay = 1;
+  }
+
+  const weatherCodeString = weatherCodeToString(weather_code, isDay);
 
   return (
     <>
@@ -64,6 +79,7 @@ const CurrentWeatherModule = ({
               <div className="weather-module grid gap-x-1 gap-y-0 aspect-3/2 h-26 place-self-center mb-3 px-1 w-md">
                 <div className="col-span-1 row-span-2 col-start-1 row-start-1 place-self-center">
                   <WeatherIcon
+                    isDay={isDay}
                     weather_code={weather_code}
                     className="transition-height duration-300 ease-in h-20 md:h-45 relative md:-inset-y-15 rounded-full shadow-2xl bg-lime-900/30"
                   />
@@ -114,8 +130,10 @@ const CurrentWeatherModule = ({
               setAdvice("Honk! Let me do a flyover...");
               try {
                 await handleClothingAdvice(
+                  temperature_min,
+                  temperature_max,
                   temperature_2m,
-                  temperature_2m,
+                  apparent_temperature,
                   weatherCodeString,
                   tempPref,
                   tempUnit,

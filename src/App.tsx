@@ -52,6 +52,11 @@ function MainApp() {
         weather_code={weatherData.current.weather_code}
         locationName={location.name}
         tempPref={tempPref}
+        temperature_min={weatherData.daily.temperature_2m_min[0]}
+        temperature_max={weatherData.daily.temperature_2m_max[0]}
+        sunrise={weatherData.daily.sunrise[0]}
+        sunset={weatherData.daily.sunset[0]}
+        time={weatherData.current.time}
       />
     );
   }
